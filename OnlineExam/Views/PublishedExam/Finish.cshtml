@@ -1,0 +1,40 @@
+﻿@model OnlineExam.Models.ResultSummary
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewBag.Title = "Result Summary";
+}
+
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        <small>Finished Exam</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+    </ol>
+</section>
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Your Exam Summary</h1>
+                </div>
+                <div class="box-body">
+                    <label>Self-Mark- @Model.ObtainMark</label><br />
+                    <label>Self-Mark Percentage- @Model.ObtainMarkPercentage %</label><br />
+                    <label>Average Mark- @Model.AvgObtainMarks</label><br />
+                    <label>Average Mark Percentage- @Model.AvgObtainMarksPercentage %</label><br />
+                    <label>Highest Mark- @Model.MaxObtainMarks</label><br />
+                    <label>Highest Mark Percentage- @Model.MaxObtainMarksPercentage %</label><br />
+
+                    @{
+                        Html.RenderPartial("DetailExam", Model.QuestionHistory);
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,172 @@
+﻿@model OnlineExam.Models.Exam
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int row = 0;
+}
+<style>
+    .txtRequired {
+        border-left: 2px solid #ff0000;
+    }
+
+    .spnRequired {
+        color: #ff0000;
+    }
+</style>
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        Model Test
+        <small>Add Model Test</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
+        <li class="active">Model Test</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Add Model Test</h1>
+                    <a class="btn btn-default pull-right" href="@Url.Action("Index", "ModelTest")"><i class="fa fa-reply"></i> Back to list</a>
+                </div>
+                @using (Html.BeginForm("Create", "ModelTest", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Batch
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10 ">
+                                <div class="txtRequired">
+                                    @Html.DropDownList("BatchId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @id = "ddlBatchId" })
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Name
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                @Html.TextBoxFor(model => model.ExamName, new { @required = "required", @class = "form-control txtRequired" })
+                                @Html.ValidationMessageFor(model => model.ExamName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        @if (Model.QuestionForModelTests.Count > 0)
+                        {
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                <table id="sa" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr style="background-color: #3c8dbc; color: white; ">
+                                            <th>#</th>
+                                            <th>Type</th>
+                                            <th>Question</th>
+                                            <th>Subject</th>
+                                            <th>Chapter</th>
+                                            <th><input type="checkbox" id="chkQuestionAllCheck" /> Is Included?</th>
+                                        </tr>
+                                    </thead>
+                                    @for (int i = 0; i < Model.QuestionForModelTests.Count; i++)
+                                    {
+                                        row++;
+                                        <tr>
+
+                                            <td>@row</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => modelItem.QuestionForModelTests[i].QuestionTypeName)
+                                                @*@Html.HiddenFor(modelItem => modelItem.QuestionForModelTests[i].QuestionTypeName)*@
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => modelItem.QuestionForModelTests[i].QuestionName)
+                                                @*@Html.HiddenFor(modelItem => modelItem.QuestionForModelTests[i].QuestionName)*@
+                                                @Html.HiddenFor(modelItem => modelItem.QuestionForModelTests[i].QuestionId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => modelItem.QuestionForModelTests[i].SubjectName)
+                                                @*@Html.HiddenFor(modelItem => modelItem.QuestionForModelTests[i].SubjectName)*@
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => modelItem.QuestionForModelTests[i].ChapterName)
+                                                @*@Html.HiddenFor(modelItem => modelItem.QuestionForModelTests[i].ChapterName)*@
+                                            </td>
+                                            <td>
+                                                @Html.CheckBoxFor(modelItem => modelItem.QuestionForModelTests[i].IsIncluded, new { @class = "chkItem" })
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+
+                            </div>
+                        }
+
+
+                    </div>
+                    <div class="box-footer" style="border-top: 1px dotted #e4e0e0;">
+                        <div style="margin:0 auto; width:200px">
+                            <button type="submit" class="btn btn-primary">SAVE</button>
+                            <a class="btn btn-default" href="@Url.Action("Index", "ModelTest")">CANCEL</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#chkQuestionAllCheck').change(function () {
+                var isChecked = false;
+                if (document.getElementById('chkQuestionAllCheck').checked) {
+                    isChecked = true;
+                }
+                if (isChecked) {
+                    $('.chkItem').prop("checked", true);
+                }
+                else {
+                    $('.chkItem').prop("checked", false);
+                }
+            });
+
+            var table = $('#sa').DataTable({
+                paging: false,
+                searching: true,
+                sorting: false,
+                scrollX: true,
+                scrollY: '40vh',
+                fixedColumns: {
+                    leftColumns: 3,
+                    rightColumns: 1
+                },
+                bLengthChange: true,
+                "iDisplayLength": -1,
+                "fnInitComplete": function () {
+                    $("#sa").css("width", "100%");
+                    $(".dataTables_scrollHeadInner").css("width", "100%");
+                    $("table.table-hover.dataTable").css("width", "100%");
+                },
+                columnDefs: [{ width: 10, targets: 0 }]
+            });
+        });
+    </script>
+}

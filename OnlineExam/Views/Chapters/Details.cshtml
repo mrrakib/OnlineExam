@@ -1,0 +1,63 @@
+﻿@model OnlineExam.Models.Chapter
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+
+    .lblHead {
+        background-color: #eaeaea;
+        text-align: right;
+        font-weight: bold;
+        color: #646464;
+    }
+</style>
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        Chapters
+        <small>Chapter Details</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
+        <li class="active">Chapters</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Chapter Details</h1>
+                    <div class="btn-group box-tools pull-right" role="group" aria-label="Basic example">
+                        <a type="button" class="btn btn-default" href="@Url.Action("Index", "Chapters")"><i class="fa fa-reply"></i> Back to list</a>
+                        <a type="button" class="btn btn-default" href="@Url.Action("Edit", "Chapters", new { id=Model.Id})"><i class="fa fa-edit"></i> Edit</a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="mailbox-read-message">
+                        <table class="table table-info" style="max-width:500px; margin:0 auto;">
+                            <tr>
+                                <td class="lblHead">Subject</td>
+                                <td>@Model.Subject.SubjectName</td>
+                            </tr>
+                            <tr>
+                                <td class="lblHead">Name</td>
+                                <td>@Model.ChapterName</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+
+    </div>
+</section>
+

@@ -1,0 +1,73 @@
+﻿@using OnlineExam.ViewModels
+@model LoginViewModel
+@{
+    Layout = "~/Views/Shared/_LoginRegister.cshtml";
+    ViewBag.Title = "Log in";
+}
+<style>
+    #otp-input {
+        border: none;
+        width: 8.5ch;
+        background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 1ch, transparent 0, transparent 1.5ch) 0 100%/100% 2px no-repeat;
+        color: dimgrey;
+        font: 4ch consolas, monospace;
+        letter-spacing: .4ch;
+    }
+
+        #otp-input:focus {
+            outline: none;
+            color: dodgerblue;
+        }
+</style>
+
+<!-- /.login-logo -->
+<div class="login-box-body">
+    <p class="login-box-msg" style="font-weight:bold; color:green;">An OTP was sent to your phone</p>
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(m => m.Email)
+        @Html.HiddenFor(m => m.Password)
+
+        @*<div class="input-group">
+            <div class="input-group-addon">
+                OTP
+            </div>
+            <input required minlength="11" id="txtOtp" type="text" name="Otp" maxlength="11" autocomplete="off" class="form-control" data-inputmask='"mask": "9 9 9 9 9 9"' data-mask>
+        </div>*@
+     
+        <div class="form-group">
+
+                <input required minlenghth="6" name="Otp" id="otp-input" type="text" maxlength="6" autocomplete="off" />
+
+                @Html.ValidationMessageFor(m => m.Otp, "", new { @class = "text-danger" })
+
+            </div>
+
+
+        <div class="row">
+
+            <!-- /.col -->
+            <div class="col-xs-6">
+                <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-6">
+                @*<button type="button" class="btn btn-primary btn-block btn-flat">Resend</button>*@
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary btn-block btn-flat">Back to login</a>
+            </div>
+        </div>
+    }
+
+</div>
+<!-- /.login-box-body -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $("#otp-input").focus();
+        })
+    </script>
+}

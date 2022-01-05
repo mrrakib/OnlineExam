@@ -1,0 +1,115 @@
+﻿@model OnlineExam.Models.Batch
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .txtRequired {
+        border-left: 2px solid #ff0000;
+    }
+
+    .spnRequired {
+        color: #ff0000;
+    }
+</style>
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        Batch
+        <small>Add Batch</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
+        <li class="active">Batch</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Add Batch</h1>
+                    <a class="btn btn-default pull-right" href="@Url.Action("Index", "Batch")"><i class="fa fa-reply"></i> Back to list</a>
+                </div>
+                @using (Html.BeginForm("Create", "Batch", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+
+
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Name
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                @Html.TextBoxFor(model => model.BatchName, new { @required = "required", @class = "form-control txtRequired" })
+                                @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        @if (Model.Subjects.Count > 0)
+                        {
+                            <div class="col-md-12 col-sm-12 col-xs-12 itemHead">
+                                <b>Permitted Subjects</b>
+
+
+                                <div class="col-md-2 col-sm-4 col-xs-6 pull-right">
+                                    <input type="checkbox" id="chkSubjectAllCheck" />Check all Subjects
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12  itemBody">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    @for (int i = 0; i < Model.Subjects.Count; i++)
+                                    {
+                                        <div class="col-md-3 col-sm-3 col-xs-3 itemContent" id="">
+                                            @Html.CheckBoxFor(model => model.Subjects[i].IsSelected, new { @class = "chkItem" })
+                                            <b> @Model.Subjects[i].SubjectName</b>
+                                            @Html.HiddenFor(model => model.Subjects[i].Id)
+                                            @Html.HiddenFor(model => model.Subjects[i].SubjectName)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                    <div class="box-footer" style="border-top: 1px dotted #e4e0e0;">
+                        <div style="margin:0 auto; width:200px">
+                            <button type="submit" class="btn btn-primary">SAVE</button>
+                            <a class="btn btn-default" href="@Url.Action("Index", "Batch")">CANCEL</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#chkSubjectAllCheck').change(function () {
+                var isChecked = false;
+                if (document.getElementById('chkSubjectAllCheck').checked) {
+                    isChecked = true;
+                }
+                if (isChecked) {
+                    $('.chkItem').prop("checked", true);
+                }
+                else {
+                    $('.chkItem').prop("checked", false);
+                }
+            });
+        });
+    </script>
+}

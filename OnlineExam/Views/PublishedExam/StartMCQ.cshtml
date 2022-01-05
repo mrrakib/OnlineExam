@@ -1,0 +1,137 @@
+﻿@model List<OnlineExam.Models.MCQQuestion>
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    ViewBag.Title = "Running Exam";
+    var examTimeInMinutes = ViewBag.ExamTimeInMinutes;
+    int row = 0;
+}
+<style>
+    .checkbox-toolbar li input {
+        display: none;
+    }
+
+    .checkbox-toolbar li label {
+        display: block;
+        color: #000;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .checkbox-toolbar li input[type="checkbox"]:checked + label {
+        color: salmon;
+        background-color: #eee;
+        border-radius: 10px;
+    }
+</style>
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Online Test</h1>
+                    <h1 class='timer pull-right box-title' data-minutes-left=@examTimeInMinutes style="pointer-events: none;"></h1>
+                </div>
+                @if (Model != null && Model.Any())
+                {
+                    using (Html.BeginForm("Finish", "Exam", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off", id = "myExamForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="box-body">
+                            <div class="row">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    row++;
+                                    <div class="col-md-6">
+                                        <div class="box box-success box-solid">
+                                            <div class="box-header with-border"  style="background-color: #3c8dbc; color: white;">
+                                                <h3 class="box-title">@row . @Model[i].QuestionName</h3>
+                                                @Html.Hidden("Model[" + @i + "].Id", Model[i].Id)
+                                                @Html.Hidden("Model[" + @i + "].IsMCQ", Model[i].IsMCQ)
+                                                @Html.Hidden("Model[" + @i + "].SubjectId", Model[i].SubjectId)
+                                                @Html.Hidden("Model[" + @i + "].ChapterId", Model[i].ChapterId)
+                                                @Html.Hidden("Model[" + @i + "].TopicId", Model[i].TopicId)
+
+                                                <div class="box-tools pull-right">
+                                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- /.box-tools -->
+                                            </div>
+                                            <!-- /.box-header -->
+                                            <div class="box-body">
+                                                <ol type="a" class="checkbox-toolbar">
+                                                    @for (int o = 0; o < Model[i].MCQQuestionOptions.Count; o++)
+                                                    {
+                                                        @Html.Hidden("Model[" + @i + "].MCQQuestionOptions[" + @o + "].Id", Model[i].MCQQuestionOptions[o].Id)
+                                                        <li>
+                                                            <input type="checkbox" id="@Model[i].MCQQuestionOptions[o].RadioOrCheckBoxQuestionOptionId" name="Model[@i].MCQQuestionOptions[@o].CheckedOptionId" value="@Model[i].MCQQuestionOptions[o].Id" />
+                                                            <label for="@Model[i].MCQQuestionOptions[o].RadioOrCheckBoxQuestionOptionId">@Model[i].MCQQuestionOptions[o].OptionName</label>
+                                                        </li>
+                                                    }
+                                                </ol>
+                                             
+                                            </div>
+                                            <!-- /.box-body -->
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="box-footer" style="border-top: 1px dotted #e4e0e0;">
+                            <div style="margin:0 auto; width:200px">
+                                <button type="submit" onclick="return confirm('Do you want to Finish Exam?')" class="btn btn-primary">Finish Exam</button>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="box-body">
+                        <strong>Question Not Found!</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    //window.addEventListener('beforeunload', function (e) {
+    //    e.preventDefault();
+    //    e.returnValue = '';
+    //});
+
+    $(document).ready(function () {
+        var examTime =@examTimeInMinutes;
+        var examTimeInMilisecond = examTime * 60000;
+
+        function autoSubmitForm() {
+            $("#myExamForm").submit();
+        }
+        if (parseInt(examTimeInMilisecond) > 0) {
+            setTimeout(autoSubmitForm, examTimeInMilisecond + 1);   //1 min =60,000 sec
+        }
+
+        //$("#submitFinishExam").click(function () {
+        //    if (confirm('Do you want to Finish Exam?')) {
+        //        debugger;
+        //        $("#submitFinishExam").submit();
+        //    }
+        //});
+    });
+
+    function checkedNow(id) {
+        debugger;
+        if ($('#' + id).is(':checked')) {
+            $('#' + id).attr('checked', false);
+        } else {
+            $('#' + id).attr('checked', true);
+        }
+    }
+
+</script>

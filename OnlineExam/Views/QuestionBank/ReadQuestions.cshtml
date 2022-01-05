@@ -1,0 +1,241 @@
+﻿@model OnlineExam.ViewModels.ExamInformationViewModel
+@{
+    ViewBag.Title = "Read Questions";
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+}
+
+<style>
+    .txtRequired {
+        border-left: 2px solid #ff0000;
+    }
+
+    .spnRequired {
+        color: #ff0000;
+    }
+</style>
+
+<!-- Main content -->
+<section class="content">
+    <div class="box box-default">
+        <div class="box-header with-border content-header">
+            <h1 class="box-title">Read Questions</h1>
+            <ol class="breadcrumb">
+                <li><a href="@Url.Action("Index", "Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Read Questions</li>
+            </ol>
+        </div>
+        <div class="box-body">
+            @using (Html.BeginForm("ReadQuestions", "QuestionBank", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                        Batch
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-10 ">
+                        <div class="txtRequired">
+                            @Html.DropDownList("BatchId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @id = "ddlBatchId" })
+                        </div>
+
+                        @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                        Subject
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-10 ">
+                        <div class="txtRequired">
+                            @Html.DropDownList("SubjectId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @id = "ddlSubjectId" })
+                        </div>
+
+                        @Html.ValidationMessageFor(model => model.SubjectId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                        Chapter
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-10 ">
+                        <div class="txtRequired">
+                            @Html.DropDownList("ChapterId", null, string.Empty, new { @class = "select2 txtRequired", @id = "ddlChapterId" })
+                        </div>
+
+                        @Html.ValidationMessageFor(model => model.ChapterId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*<div class="form-group">
+                    <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                        Topic
+                    </label>
+
+                    <div class="col-md-6 col-sm-6 col-xs-10 ">
+                        <div class="txtRequired">
+                            @Html.DropDownList("TopicId", null, string.Empty, new { @class = "select2 txtRequired", @id = "ddlTopicId" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.TopicId, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                        Question Type
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-10 ">
+                        <div class="txtRequired">
+                            @Html.DropDownList("QuestionType", null, "--Select--", new { @required = "required", @class = "select2 txtRequired", @id = "ddlQuestionType" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.QuestionType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*<div class="form-group">
+                <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                    Total Question
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-10 ">
+                    <div class="txtRequired">
+                        @Html.TextBoxFor(a => a.TotalQuestion, new { @required = "required", @class = "txtRequired", @type = "number", @placeholder = "Total no of questions" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.TotalQuestion, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+                <div class="form-group">
+                    <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                        Total Question
+                    </label>
+
+                    <div class="col-md-6 col-sm-6 col-xs-10">
+                        @Html.TextBoxFor(model => model.TotalQuestion, new { @type = "number", @class = "form-control", @placeholder = "Total No of Question!" })
+                        Max Question @Html.CheckBoxFor(a => a.IsFullQuestionLoad, new { @id = "IsFullQuestionLoadChecked" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6 col-md-offset-3 col-sm-6 col-xs-10 ">
+                        <button type="submit" onclick="return confirm('Do you want to START Read?')" class="btn btn-primary">Start Read</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</section>
+<!-- /.content -->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+        $(document).ready(function () {
+            $("#IsFullQuestionLoadChecked").change(function () {
+                if (this.checked) {
+                    $("#TotalQuestion").val(0);
+                    $('#TotalQuestion').prop("disabled", true);
+
+                } else {
+                    $("#TotalQuestion").val(20);
+                    $('#TotalQuestion').prop("disabled", false);
+                }
+            });
+        });
+
+    $(document).on("change", "#ddlBatchId", function () {
+        var batchId = $("#ddlBatchId").val();
+            $("#ddlSubjectId").empty();
+            $("#ddlChapterId").empty();
+            $("#ddlTopicId").empty();
+            var pre = '<option value="">---Select---</option>';
+            $("#select2-ddlSubjectId-container").empty();
+            $("#select2-ddlSubjectId-container").append('<span class="select2-selection__placeholder">---Select---</span>');
+        if (batchId > 0) {
+                $.ajax({
+
+                url: "@Url.Action("GetSubjectByBatchId", "JsonCall")",
+                type: "GET",
+                dataType: "json",
+                    data: { batchId: batchId},
+                success: function (list) {
+                    if (list.length > 0) {
+                        $.each(list, function (i, chapter) {
+                            pre = pre + '<option value="'
+                                + chapter.Id + '">'
+                                + chapter.SubjectName + '</option>';
+                        });
+
+                        $("#ddlSubjectId").append(pre);
+                    } else {
+                        alert('No Subject found');
+                    }
+
+                }
+            })
+            }
+
+
+        })
+
+        $(document).on("change", "#ddlSubjectId", function () {
+            var subjectId = $("#ddlSubjectId").val();
+            $("#ddlChapterId").empty();
+            $("#ddlTopicId").empty();
+            var pre = '<option value="">---Select---</option>';
+            $("#select2-ddlChapterId-container").empty();
+            $("#select2-ddlChapterId-container").append('<span class="select2-selection__placeholder">---Select---</span>');
+            if (subjectId > 0) {
+                $.ajax({
+
+                url: "@Url.Action("GetChapterBySubjectId", "JsonCall")",
+                type: "GET",
+                dataType: "json",
+                data: { subjectId: subjectId},
+                success: function (list) {
+                    if (list.length > 0) {
+                        $.each(list, function (i, chapter) {
+                            pre = pre + '<option value="'
+                                + chapter.Id + '">'
+                                + chapter.ChapterName + '</option>';
+                        });
+
+                        $("#ddlChapterId").append(pre);
+                    } else {
+                        alert('No Chapter found');
+                    }
+
+                }
+            })
+            }
+
+
+        })
+
+    $(document).on("change", "#ddlChapterId22", function () {
+        var chapterId = $("#ddlChapterId").val();
+        $("#ddlTopicId").empty();
+        var pre = '<option value="">---Select---</option>';
+        $("#select2-ddlTopicId-container").empty();
+        $("#select2-ddlTopicId-container").append('<span class="select2-selection__placeholder">---Select---</span>');
+        if (chapterId > 0) {
+                $.ajax({
+
+                url: "@Url.Action("GetTopicByChapterId", "JsonCall")",
+                type: "GET",
+                dataType: "json",
+                data: { chapterId: chapterId},
+                success: function (list) {
+
+                    if (list.length > 0) {
+                        $.each(list, function (i, topic) {
+                            pre = pre + '<option value="'
+                                + topic.Id + '">'
+                                + topic.TopicName + '</option>';
+                        });
+
+                        $("#ddlTopicId").append(pre);
+                    } else {
+                        alert('No Chapter found');
+                    }
+                }
+            })
+            }
+
+
+        })
+</script>
+}

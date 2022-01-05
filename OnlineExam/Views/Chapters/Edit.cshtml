@@ -1,0 +1,83 @@
+﻿@model OnlineExam.Models.Chapter
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .txtRequired {
+        border-left: 2px solid #ff0000;
+    }
+
+    .spnRequired {
+        color: #ff0000;
+    }
+</style>
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        Chapters
+        <small>Edit Chapter</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
+        <li class="active">Chapters</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Edit Chapter</h1>
+                    <a class="btn btn-default pull-right" href="@Url.Action("Index", "Chapters")"><i class="fa fa-reply"></i> Back to list</a>
+                </div>
+                @using (Html.BeginForm("Edit", "Chapters", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Subject
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                <div class="txtRequired">
+                                    @Html.DropDownList("SubjectId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @id = "ddlSubjectId" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.SubjectId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Name
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                @Html.TextBoxFor(model => model.ChapterName, new { @required = "required", @class = "form-control txtRequired" })
+                                @Html.ValidationMessageFor(model => model.ChapterName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer" style="border-top: 1px dotted #e4e0e0;">
+                        <div style="margin:0 auto; width:200px">
+                            <button type="submit" class="btn btn-primary">SAVE</button>
+                            <a class="btn btn-default" href="@Url.Action("Index", "Chapters")">CANCEL</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

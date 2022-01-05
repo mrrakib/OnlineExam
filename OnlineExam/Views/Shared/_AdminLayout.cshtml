@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title | E-Exam </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Styles.Render("~/Content/ltecss")
+    <link href="~/dist/css/jquery-ui.css" rel="stylesheet" />
+    <link href="~/dist/css/jquery-confirm.min.css" rel="stylesheet" />
+    <link href="~/dist/css/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    @*<link href="~/dist/css/custom.css" rel="stylesheet" />*@
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #d2d6de;
+            border-radius: 0;
+        }
+
+        .select2-container .select2-selection--single {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: block;
+            height: 34px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+            .select2-container .select2-selection--single .select2-selection__rendered {
+                display: block;
+                padding-left: 0px;
+                padding-right: 20px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+        .select2 {
+            width: 100%;
+        }
+
+        .ajax-loading {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: #000000;
+            background: rgba(0,0,0,0.5);
+            z-index: 99999;
+            text-align: center;
+        }
+
+        .helper {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+
+        .itemContent {
+            background-color: #F5F7FA;
+            padding: 5px;
+            padding-left: 10px;
+            margin: 10px;
+            margin-left: 30px;
+            margin-bottom: 5px;
+            border: 1px solid #b5b3b3;
+            border-left: 5px solid #3c8dbc;
+            box-shadow: 10px 10px lightgrey;
+            border-top-right-radius: 2em;
+            border-bottom-left-radius: 1em;
+            border-top-left-radius: 1em;
+            border-bottom-right-radius: 2em;
+        }
+
+        .itemBody {
+            /*background-color: #f8f8f8;*/
+            border: solid 4px;
+            border-color: #ededed;
+            padding: 10px;
+            margin-top: 0px;
+            border-bottom-left-radius: 1em;
+            border-bottom-right-radius: 10em;
+        }
+
+        .itemHead {
+            background-color: #ededed;
+            padding: 5px;
+            margin-top: 5px;
+            text-align: left;
+            border-top-left-radius: 1em;
+            border-top-right-radius: 4em;
+            border-top: 2px solid #3c8dbc;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="modal fade" id="modalDefault">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Explanation</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="modalbody"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="wrapper">
+        @Html.Partial("_topBar")
+
+        @Html.Partial("_sideBar")
+
+        <!-- Content Wrapper. Contains page content -->
+        <div id="BodyContainer" class="content-wrapper">
+            @RenderBody()
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; 2021 <a href="https://adminlte.io">ODC</a>.</strong> All rights
+            reserved.
+        </footer>
+        <div class="ajax-loading">
+            <span class="helper"></span><img class="loader-image" src="~/Content/img/ajax-loading.gif">
+        </div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery 3 -->
+    @Scripts.Render("~/bundles/ltejquery")
+    <!-- jQuery UI 1.11.4 -->
+    @Scripts.Render("~/bundles/jqueryUI")
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>$.widget.bridge('uibutton', $.ui.button);</script>
+
+    @Scripts.Render("~/bundles/ltejs")
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    @Scripts.Render("~/bundles/dashboard")
+    <!-- AdminLTE for demo purposes -->
+    @Scripts.Render("~/bundles/ltedemo")
+    <script src="~/dist/js/jquery-ui.js"></script>
+    <script src="~/dist/js/jquery-confirm.min.js"></script>
+    <script src="~/dist/js/toastr/toastr.min.js"></script>
+    <script src="~/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="~/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        function ActivateStudent(obj) {
+            $.confirm({
+                title: 'Are you sure to activate?',
+                content: null,
+                animation: 'scale',
+                icon: 'fa fa-warning',
+                type: 'red',
+                closeIcon: true,
+                boxWidth: '30%',
+                useBootstrap: false,
+                buttons: {
+                    No: {
+                        text: 'No',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    },
+                    Yes: {
+                        text: 'Yes',
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            document.location = obj;
+                        }
+                    }
+                }
+            });
+            return false;
+
+        }
+        function DeActivateStudent(obj) {
+            $.confirm({
+                title: 'Are you sure to deactivate?',
+                content: null,
+                animation: 'scale',
+                icon: 'fa fa-warning',
+                type: 'red',
+                closeIcon: true,
+                boxWidth: '30%',
+                useBootstrap: false,
+                buttons: {
+                    No: {
+                        text: 'No',
+                        btnClass: 'btn-green',
+                        action: function () {
+
+                        }
+                    },
+                    Yes: {
+                        text: 'Yes',
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            document.location = obj;
+                        }
+                    }
+                }
+            });
+            return false;
+
+        }
+
+        $(document).ready(function () {
+            $(".ajax-loading").hide();
+        })
+
+        $(document).ajaxStart(function () {
+            $(".ajax-loading").show();
+        });
+
+        $(document).ajaxStop(function () {
+            $(".ajax-loading").hide();
+            //setTimeout(function () {
+            //    $(".ajax-loading").hide();
+            //}, 1000)
+        });
+        $(function () {
+
+            //Initialize Select2 Elements
+            $('.select2').select2({
+                allowClear: true,
+                placeholder: "--Select--"
+            })
+
+            var urlString = window.location.toString();
+
+            var hasValue = urlString.substr(0, urlString.indexOf("/Create"));
+    if (hasValue.length < 1) {
+    hasValue = urlString.substr(0, urlString.indexOf("/Edit"));
+    }
+    if (hasValue.length < 1) {
+    hasValue = urlString.substr(0, urlString.indexOf("/View"));
+    }
+    if (hasValue.length < 1) {
+    hasValue = urlString.substr(0, urlString.indexOf("?"));
+    }
+    if (hasValue.length > 0) {
+    urlString = hasValue;
+    }
+    var menuItem = $('.sidebar-menu li a').filter(function () {
+    return this.href == urlString;
+    })
+    menuItem.parent('li').addClass('treeview active menu-open').parent('ul').slideDown().parent().addClass('treeview active menu-open');
+
+    })
+    function DeleteItem(obj) {
+    $.confirm({
+    title: 'Are you sure to delete this item?',
+    content: null,
+    animation: 'scale',
+    icon: 'fa fa-warning',
+    type: 'red',
+    closeIcon: true,
+    boxWidth: '30%',
+    useBootstrap: false,
+    buttons: {
+    No: {
+    text: 'No',
+    btnClass: 'btn-green',
+    action: function () {
+
+    }
+    },
+    Yes: {
+    text: 'Yes',
+    btnClass: 'btn-danger',
+    action: function () {
+    document.location = obj;
+    }
+    }
+    }
+    });
+    return false;
+
+    }
+    $(function () {
+
+    toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-center",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "200",
+    "hideDuration": "200",
+    "timeOut": "5000",
+    "extendedTimeOut": "200",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+    }
+
+    //notification with toastr
+    var saveMsg = '@TempData["save"]';
+    var updateMsg = '@TempData["update"]';
+    var deleteMsg = '@TempData["delete"]';
+    var customMsg = '@TempData["custom"]';
+    var warningMsg = '@TempData["warning"]';
+    var successMsg = '@TempData["success"]';
+    if (saveMsg != '') {
+    Command: toastr["success"]("Data saved successfully!")
+    }
+    if (updateMsg != '') {
+    Command: toastr["success"]("Data updated successfully!")
+    }
+    if (deleteMsg != '') {
+    Command: toastr["error"]("Data deleted successfully!")
+    }
+    if (customMsg != '') {
+    Command: toastr["warning"](customMsg)
+    }
+    if (warningMsg != '') {
+    Command: toastr["error"](warningMsg)
+    }
+    if (successMsg != '') {
+    Command: toastr["success"](successMsg)
+    }
+
+
+    //Command: toastr["success"]("Are you the six fingered man?")
+
+
+    });
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

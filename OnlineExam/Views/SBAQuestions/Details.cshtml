@@ -1,0 +1,108 @@
+﻿@model OnlineExam.Models.MCQQuestion
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int i = 0;
+}
+<style>
+
+    .lblHead {
+        background-color: #eaeaea;
+        text-align: right;
+        font-weight: bold;
+        color: #646464;
+    }
+</style>
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        SBAQuestions
+        <small>SBAQuestion Details</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
+        <li class="active">SBAQuestions</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>SBAQuestions Details</h1>
+                    <div class="btn-group box-tools pull-right" role="group" aria-label="Basic example">
+                        <a type="button" class="btn btn-default" href="@Url.Action("Index", "SBAQuestions")"><i class="fa fa-reply"></i> Back to list</a>
+                        <a type="button" class="btn btn-default" href="@Url.Action("Edit", "SBAQuestions", new { id=Model.Id})"><i class="fa fa-edit"></i> Edit</a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="mailbox-read-message">
+                        <table class="table table-info" style="max-width:500px; margin:0 auto;">
+                            <tr>
+                                <td class="lblHead">Subject</td>
+                                <td>@Model.Subject.SubjectName</td>
+                            </tr>
+                            <tr>
+                                <td class="lblHead">Chapter</td>
+                                <td>@Model.Chapter.ChapterName</td>
+                            </tr>
+                            <tr>
+                                <td class="lblHead">Topic</td>
+                                <td>@Model.Topic.TopicName</td>
+                            </tr>
+                            <tr>
+                                <td class="lblHead">Question</td>
+                                <td>@Model.QuestionName</td>
+                            </tr>
+                            <tr>
+                                <td class="lblHead">Explanation</td>
+                                <td>@Model.Explanation</td>
+                            </tr>
+                            <tr>
+                                <td class="lblHead">
+                                    Options
+                                </td>
+                                <td>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>No#</th>
+                                                <th>Option</th>
+                                                <th>Answer</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @if (Model.MCQQuestionOptions != null)
+                                            {
+                                                foreach (var item in Model.MCQQuestionOptions)
+                                                {
+                                                    i++;
+                                                    <tr>
+                                                        <td>@i</td>
+                                                        <td>@item.OptionName</td>
+                                                        <td>@item.IsAnswer</td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+

@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Select file";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Upload Excel</h1>
+                    <a class="btn btn-danger pull-right" href="@Url.Action("Index")"><i class="fa fa-reply"></i> Back</a>
+                </div>
+                @using (Html.BeginForm("UploadExcel", "BulkQuestionUpload", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off", @enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Excel
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10 ">
+                                <div class="txtRequired">
+                                    <input type="file" name="excel" value="" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer" style="border-top: 1px dotted #e4e0e0;">
+                        <div style="margin:0 auto; width:200px">
+                            <button type="submit" class="btn btn-primary">Upload Excel</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+    </script>
+}

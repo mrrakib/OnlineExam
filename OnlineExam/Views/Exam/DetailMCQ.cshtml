@@ -1,0 +1,154 @@
+﻿@model List<OnlineExam.Models.MCQQuestion>
+@{
+    string roleName = ViewBag.RoleName;
+    Layout = roleName == "Admin" ? "~/Views/Shared/_AdminLayout.cshtml" : roleName == "Student" ? "~/Views/Shared/_StudentLayout.cshtml" : null;
+    ViewBag.Title = "Exam Details";
+    int row = 0;
+}
+
+<style>
+    .checkbox-toolbar li input {
+        display: none;
+    }
+
+    .checkbox-toolbar li label {
+        display: block;
+        color: #000;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .checkbox-toolbar li input[type="checkbox"]:checked + label {
+        color: salmon;
+        background-color: #eee;
+    }
+
+    .checkbox-toolbar li label.sbaSpan {
+        position: relative;
+    }
+
+    span.trueSpan, span.falseSpan {
+        position: absolute;
+        left: 0%;
+        border: 1px solid #ddd;
+        width: 15px;
+        height: 15px;
+        font-size: 11px;
+        border-radius: 50%;
+        top: 32%;
+        text-align: center;
+        background: #00da11;
+        color: #fff;
+        margin-left: 4px;
+    }
+
+    span.falseSpan {
+        background: red;
+    }
+</style>
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Online Test Details</h1>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            row++;
+                            var trueOptionChecked = Model[i].TrueOptionId.Split(',').ToList();
+                            var falseOptionChecked = Model[i].FalseOptionId.Split(',').ToList();
+                            var classGenerate = String.Empty;
+                            if (Model[i].TrueOptionId.Length > 0)
+                            {
+                                classGenerate = "box box-success box-solid";
+                            }
+                            else
+                            {
+                                classGenerate = "box box-default box-solid";
+                            }
+                            <div class="col-md-6">
+                                <div class="@classGenerate">
+                                    <div class="box-header with-border"  style="background-color: #3c8dbc; color: white;">
+                                        <h3 class="box-title">@row . @Model[i].QuestionName</h3>
+
+                                        <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <!-- /.box-tools -->
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                        <ol type="a" class="checkbox-toolbar">
+                                            @for (int o = 0; o < Model[i].MCQQuestionOptions.Count; o++)
+                                            {
+                                                var optionId = Model[i].MCQQuestionOptions[o].Id;
+                                                <li>
+                                                    <input type="checkbox" id="@optionId" />
+                                                    @if (trueOptionChecked.Exists(a => a.Equals(optionId.ToString())) && Model[i].MCQQuestionOptions.Exists(a => a.IsAnswer && a.Id == optionId))
+                                                    {
+                                                        <label class="sbaSpan" style="color: salmon; background-color: #eee; border-radius: 10px;">
+                                                            @Model[i].MCQQuestionOptions[o].OptionName
+                                                            <span style="pointer-events: none;" class="trueSpan showAns">T</span>
+                                                        </label>
+                                                    }
+                                                    else if (falseOptionChecked.Exists(a => a.Equals(optionId.ToString())) || trueOptionChecked.Exists(a => a.Equals(optionId.ToString())))
+                                                    {
+                                                        <label class="sbaSpan" style="color: salmon; background-color: #eee; border-radius: 10px;">
+                                                            @Model[i].MCQQuestionOptions[o].OptionName
+                                                            <span style="pointer-events: none;" class="falseSpan showAns">F</span>
+                                                        </label>
+                                                    }
+                                                    else if (Model[i].MCQQuestionOptions.Exists(a => a.IsAnswer && a.Id == optionId))
+                                                    {
+                                                        <label class="sbaSpan">
+                                                            @Model[i].MCQQuestionOptions[o].OptionName
+                                                            <span style="pointer-events: none;" class="trueSpan showAns">T</span>
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="pointer-events: none;">@Model[i].MCQQuestionOptions[o].OptionName</label>
+                                                    }
+                                                </li>
+                                            }
+                                        </ol>
+                                        <button type="button" onclick="getExplanation(@Model[i].Id)">
+                                            Explanation
+                                        </button>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function getExplanation(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetExplanation", "JsonCall")',
+            data: {id},
+            cache: false,
+            success: function (data) {
+                //$('#modalDefault').modal('toggle');
+                $('#modalDefault').modal('show');
+                //$('#modalDefault').modal('hide');
+
+                $('#modalbody').html(data);
+            }
+        });
+    }
+</script>

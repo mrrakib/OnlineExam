@@ -1,0 +1,61 @@
+﻿<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li>
+                <a href="@Url.Action("Index","Home")">
+                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>Master Data</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index","Batch")"><i class="fa fa-circle-o"></i> Batches</a></li>
+                    <li><a href="@Url.Action("Index","Subjects")"><i class="fa fa-circle-o"></i> Subjects</a></li>
+                    <li><a href="@Url.Action("Index","Chapters")"><i class="fa fa-circle-o"></i> Chapters</a></li>
+                    <li><a href="@Url.Action("Index","Topics")"><i class="fa fa-circle-o"></i> Topics</a></li>
+
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>Question Bank</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index","MCQQuestions")"><i class="fa fa-circle-o"></i>MCQ Questions</a></li>
+                    <li><a href="@Url.Action("Index","SBAQuestions")"><i class="fa fa-circle-o"></i>SBA Questions </a></li>
+                    <li><a href="@Url.Action("Index","BulkQuestionUpload")"><i class="fa fa-circle-o"></i> Upload Bulk Question</a></li>
+                    <li><a href="@Url.Action("Index","ModelTest")"><i class="fa fa-circle-o"></i> Model Test Questions</a></li>
+                    @*<li><a href="@Url.Action("ReadQuestions","QuestionBank")"><i class="fa fa-circle-o"></i> Read Questions</a></li>
+        <li><a href="@Url.Action("Index","Exam")"><i class="fa fa-circle-o"></i> Online Test</a></li>
+        <li><a href="@Url.Action("History","Exam")"><i class="fa fa-circle-o"></i> Exam History</a></li>*@
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-edit"></i> <span>Student Activity</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Students","Account")"><i class="fa fa-circle-o"></i> Students</a></li>
+                    <li><a href="@Url.Action("StudentWiseBatch","Account")"><i class="fa fa-circle-o"></i> Student Wise Batch</a></li>
+                    <li><a href="@Url.Action("History","Exam")"><i class="fa fa-circle-o"></i> Exam History</a></li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

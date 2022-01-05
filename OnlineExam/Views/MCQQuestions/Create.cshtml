@@ -1,0 +1,214 @@
+﻿@model OnlineExam.ViewModels.VMMCQQuestion
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .txtRequired {
+        border-left: 2px solid #ff0000;
+    }
+
+    .spnRequired {
+        color: #ff0000;
+    }
+</style>
+<section class="content-header" style="background-color: #ecf0f5;">
+    <h1>
+        MCQQuestions
+        <small>Add MCQQuestion</small>
+    </h1>
+    <ol class="breadcrumb" style="float:left">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Data</a></li>
+        <li class="active">MCQQuestions</li>
+    </ol>
+</section>
+
+
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header" style="border-bottom: 1px dotted #e4e0e0;">
+
+                    <h1 class="box-title"><i class="fa fa-fw fa-table"></i>Add MCQQuestion</h1>
+                    <a class="btn btn-default pull-right" href="@Url.Action("Index", "MCQQuestions")"><i class="fa fa-reply"></i> Back to list</a>
+                </div>
+                @using (Html.BeginForm("Create", "MCQQuestions", FormMethod.Post, new { @class = "form-horizontal form-label-left", @role = "form", autocomplete = "off" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.IsMCQ)
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Subject
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10 ">
+                                <div class="txtRequired">
+                                    @Html.DropDownList("SubjectId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @multiple = "multiple", @id = "ddlSubjectId" })
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.SubjectId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Chapter
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10 ">
+                                <div class="txtRequired">
+                                    @Html.DropDownList("ChapterId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @multiple = "multiple", @id = "ddlChapterId" })
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.ChapterId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Topic
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10 ">
+                                <div class="txtRequired">
+                                    @Html.DropDownList("TopicId", null, string.Empty, new { @required = "required", @class = "select2 txtRequired", @multiple = "multiple", @id = "ddlTopicId" })
+                                </div>
+
+                                @Html.ValidationMessageFor(model => model.TopicId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>*@
+
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Question
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                @Html.TextBoxFor(model => model.QuestionName, new { @required = "required", @class = "form-control txtRequired" })
+                                @Html.ValidationMessageFor(model => model.QuestionName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Mark
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                @Html.TextBoxFor(model => model.Mark, new { @type = "number", @required = "required", @class = "form-control txtRequired" })
+                                @Html.ValidationMessageFor(model => model.Mark, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-right col-md-3 col-sm-3 col-xs-2">
+                                Explanation
+                            </label>
+
+                            <div class="col-md-6 col-sm-6 col-xs-10">
+                                @Html.TextAreaFor(model => model.Explanation, new { @required = "required", @class = "form-control txtRequired" })
+                                @Html.ValidationMessageFor(model => model.Explanation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div>
+                            @Html.Partial("_MCQQuestionOptions", Model.MCQQuestionOptions)
+                        </div>
+
+
+                    </div>
+
+                  
+                    <div class="box-footer" style="border-top: 1px dotted #e4e0e0;">
+                        <div style="margin:0 auto; width:200px">
+                            <button type="submit" class="btn btn-primary">SAVE</button>
+                            <a class="btn btn-default" href="@Url.Action("Index", "MCQQuestionS")">CANCEL</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+        $(document).ready(function () {
+
+        })
+
+        $(document).on("change", "#ddlSubjectId", function () {
+            var subjectId = $("#ddlSubjectId").val();
+            //alert(subjectId);
+            //console.log(subjectId);
+            $("#ddlChapterId").empty();
+            $("#ddlTopicId").empty();
+            var pre = '<option value="">---Select---</option>';
+            $("#select2-ddlChapterId-container").empty();
+            $("#select2-ddlChapterId-container").append('<span class="select2-selection__placeholder">---Select---</span>');
+            //var data_to_send = JSON.stringify(subjectId);
+            //console.log(data_to_send);
+            if (subjectId.length> 0) {
+                $.ajax({
+                
+                url: "@Url.Action("GetChapterBySubjectId")",
+                    type: "GET",
+                    traditional: true,
+                dataType: "json",
+                    data: { subjectId: subjectId},
+                success: function (list) {
+                    if (list.length > 0) {
+                        $.each(list, function (i, chapter) {
+                            pre = pre + '<option value="'
+                                + chapter.Id + '">'
+                                + chapter.ChapterName + '</option>';
+                        });
+
+                        $("#ddlChapterId").append(pre);
+                    } else {
+                        //alert('No Chapter found');
+                    }
+
+                }
+            })
+            }
+
+
+        })
+
+    $(document).on("change", "#ddlChapterId22", function () {
+        var chapterId = $("#ddlChapterId").val();
+        $("#ddlTopicId").empty();
+        var pre = '<option value="">---Select---</option>';
+        $("#select2-ddlTopicId-container").empty();
+        $("#select2-ddlTopicId-container").append('<span class="select2-selection__placeholder">---Select---</span>');
+        if (chapterId.length > 0) {
+                $.ajax({
+
+                url: "@Url.Action("GetTopicByChapterId")",
+                    type: "GET",
+                    traditional: true,
+                dataType: "json",
+                data: { chapterId: chapterId},
+                success: function (list) {
+
+                    if (list.length > 0) {
+                        $.each(list, function (i, topic) {
+                            pre = pre + '<option value="'
+                                + topic.Id + '">'
+                                + topic.TopicName + '</option>';
+                        });
+
+                        $("#ddlTopicId").append(pre);
+                    } else {
+                        //alert('No Chapter found');
+                    }
+                }
+            })
+            }
+
+
+        })
+</script>
+}

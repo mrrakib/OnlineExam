@@ -1,0 +1,23 @@
+﻿@model List<OnlineExam.ViewModels.VMMCQQuestionOption>
+@using OnlineExam.Helpers
+@for (int i = 0; i < Model.Count; i++)
+{
+    <div class="form-group">
+        <label class="text-right col-md-3 col-sm-3 col-xs-2">
+            Option @HumanFriendlyInteger.IntegerToWritten(i+1)
+        </label>
+
+        <div class="col-md-5 col-sm-5 col-xs-8">
+            @Html.Hidden("MCQQuestionOptions[" + i + "].Id", Model[i].Id)
+            @Html.Hidden("MCQQuestionOptions[" + i + "].MCQQuestionId", Model[i].MCQQuestionId)
+            @Html.TextBox("MCQQuestionOptions[" + i + "].OptionName", Model[i].OptionName, new { @class = "form-control" })
+
+            @Html.ValidationMessageFor(model => model[i].OptionName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+            @Html.CheckBox("MCQQuestionOptions[" + i + "].IsAnswer", @Model[i].IsAnswer)
+            @*@Html.CheckBoxFor(model=>model[i].IsAnswer)*@
+        </div>
+
+    </div>
+}

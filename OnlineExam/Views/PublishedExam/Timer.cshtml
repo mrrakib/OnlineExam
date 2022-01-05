@@ -1,0 +1,7 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_StudentLayout.cshtml";
+    var examTimeInMinutes = ViewBag.ExamTimeInMinutes;
+}
+
+<h1 class='timer pull-right box-title' data-minutes-left=@examTimeInMinutes style="pointer-events: none;"></h1>

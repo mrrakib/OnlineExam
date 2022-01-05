@@ -1,0 +1,87 @@
+﻿@using OnlineExam.Helpers
+@{
+    string fullName = string.IsNullOrWhiteSpace(User.GETUSERFULLNAME()) ? User.GETUSERNAME() : User.GETUSERFULLNAME();
+    var sinceMember = DateTime.Now.ToString("MMM, yyyy");
+    bool isActive = User.GETISUSERACTIVE();
+}
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand"><b>Online</b>Exam</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active22"><a href="@Url.Action("Index","Home")">Home <span class="sr-only">(current)</span></a></li>
+                    <li class="active22"><a href="@Url.Action("Index","StudentWiseBatch")">Batch Enrollment <span class="sr-only">(current)</span></a></li>
+                    @if (User.GETISUSERACTIVE())
+                    {
+                        <li><a href="@Url.Action("ReadQuestions","QuestionBank")">Read Questions</a></li>
+                        <li><a href="@Url.Action("Index","Exam")">Online Test</a></li>
+                        <li><a href="@Url.Action("Index","PublishedExam")">Exam</a></li>
+                        <li><a href="@Url.Action("History","Exam")"> Exam History</a></li>
+                    }
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+
+                <ul class="nav navbar-nav">
+                    @if (!User.GETISUSERACTIVE())
+                    {
+                        <li>
+                            <div class="col-md-6 col-sm-4" style="padding-top: 15px;">
+                                <span class="badge bg-danger-active">
+                                    Activation Pending, please login after activated account
+                                </span>
+                            </div>
+                        </li>
+                    }
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img src="~/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            <span class="hidden-xs">@fullName</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header">
+                                <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <p>
+                                    @fullName
+                                    <small>Member since @sinceMember</small>
+                                </p>
+                            </li>
+
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="@Url.Action("UserProfile","Account")" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default btn-flat">Log out</a>
+                                    }
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-custom-menu -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</header>
