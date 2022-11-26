@@ -47,7 +47,7 @@ namespace OnlineExam.Data.Services
 
                     _context.SaveChanges();
                     List<BatchWiseSubject> batchWiseSubjects = new List<BatchWiseSubject>();
-                    if (model.Subjects.Where(s => s.IsSelected).ToList().Count > 0)
+                    if (model.Subjects!=null && model.Subjects.Where(s => s.IsSelected).ToList().Count > 0)
                     {
                         foreach (var subject in model.Subjects.Where(s => s.IsSelected))
                         {
