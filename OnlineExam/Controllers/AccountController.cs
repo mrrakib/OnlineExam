@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -109,17 +110,22 @@ namespace OnlineExam.Controllers
 
                     if (user.UserName.Contains('@'))
                         return View(model);
+                    string smsEnable = ConfigurationManager.AppSettings["Sms_Enable"];
+                    if (smsEnable == "true")
+                    {
+                        string message = "Use " + otp + " as your OTP to login to E-Exam, ODC Soft. Thank you.";
+                        var SmsSendStatus = SMSGateway.SendSMS(message, user.UserName);
+                        if (SmsSendStatus.status_code == 200)
+                        {
+                            _message.success(this, "An OTP Send to your mobile number");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", SmsSendStatus.error_message);
+                        }
+                    }
 
-                    //string message = "Use " + otp + " as your OTP to login to E-Exam, ODC Soft. Thank you.";
-                    //var SmsSendStatus = SMSGateway.SendSMS(message, user.UserName);
-                    //if (SmsSendStatus.status_code == 200)
-                    //{
-                    //    _message.success(this, "An OTP Send to your mobile number");
-                    //}
-                    //else
-                    //{
-                    //    ModelState.AddModelError("", SmsSendStatus.error_message);
-                    //}
+
                     return View(model);
                 }
             }
